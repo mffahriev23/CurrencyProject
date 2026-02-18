@@ -1,0 +1,27 @@
+<Solution>
+  <Folder Name="/Common/">
+    <Project Path="Authorization/Authorization.csproj" Id="dee34165-e0eb-41b7-b445-be9734d900ef" />
+    <Project Path="D:/projects/СurrencyTestTask/CurrencyTestTask/Domain/Domain.csproj" />
+  </Folder>
+  <Folder Name="/CurrencyService/">
+    <Project Path="CurrencyService.Contracts/CurrencyService.Contracts.csproj" Id="8130f00d-4bda-449b-8746-d7f15cb67b16" />
+    <Project Path="CurrencyService.Tests/CurrencyService.Tests.csproj" Id="e6071095-07b6-48b6-8ee9-4a86222192a3" />
+    <Project Path="D:/projects/СurrencyTestTask/CurrencyTestTask/CurrencyService.Application/CurrencyService.Application.csproj" Id="fe027ff7-1c47-4080-ad41-49c469396f00" />
+    <Project Path="D:/projects/СurrencyTestTask/CurrencyTestTask/CurrencyService.Domain/CurrencyService.Domain.csproj" />
+    <Project Path="D:/projects/СurrencyTestTask/CurrencyTestTask/CurrencyService.WebHost/CurrencyService.WebHost.csproj" Id="551f7a66-b369-48e2-bdb8-c51aeb9abcb0" />
+    <Project Path="D:/projects/СurrencyTestTask/CurrencyTestTask/CurrentService.Infrastructure.DAL/CurrentService.Infrastructure.DAL.csproj" />
+  </Folder>
+  <Folder Name="/JobLoaderCurrencyService/">
+    <Project Path="D:/projects/СurrencyTestTask/CurrencyTestTask/JobLoaderCurrency/JobLoaderCurrency.csproj" />
+  </Folder>
+  <Folder Name="/UserService/">
+    <Project Path="UserService.Applocation/UserService.Application.csproj" Id="b231d99b-c19f-4fba-b67a-5755d5ca6569" />
+    <Project Path="UserService.Contracts/UserService.Contracts.csproj" Id="f900922e-5cb5-4968-afaa-8f071fc2c96f" />
+    <Project Path="UserService.Domain/UserService.Domain.csproj" Id="e7e16896-20f1-40c0-99f9-e21c13909f75" />
+    <Project Path="UserService.Infrastructure.DAL/UserService.Infrastructure.DAL.csproj" Id="7c01a80d-a61c-44eb-a9ba-c0ccbdebdaae" />
+    <Project Path="UserService.Tests/UserService.Tests.csproj" Id="54f62244-9ca0-4507-8bec-c464a71123a0" />
+    <Project Path="UserService.WebHost/UserService.WebHost.csproj" Id="74ff49b7-0be1-4253-a846-61f047368576" />
+  </Folder>
+  <Project Path="D:/projects/СurrencyTestTask/CurrencyTestTask/ApiGateway/ApiGateway.csproj" />
+  <Project Path="D:/projects/СurrencyTestTask/CurrencyTestTask/MigrationBundel/MigrationBundel.csproj" />
+</Solution>
