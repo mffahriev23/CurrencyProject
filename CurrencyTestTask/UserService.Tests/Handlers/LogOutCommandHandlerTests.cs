@@ -1,4 +1,4 @@
-using Moq;
+﻿using Moq;
 using UserService.Application.Interfaces;
 using UserService.Application.Repositories;
 using UserService.Application.UnitOfWork;
@@ -11,19 +11,16 @@ namespace UserService.Tests.Handlers
     {
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
         private readonly Mock<IRefreshTokenRepository> _refreshTokenRepositoryMock;
-        private readonly Mock<IHasher> _hasherMock;
         private readonly LogOutCommandHandler _handler;
 
         public LogOutCommandHandlerTests()
         {
             _unitOfWorkMock = new Mock<IUnitOfWork>();
             _refreshTokenRepositoryMock = new Mock<IRefreshTokenRepository>();
-            _hasherMock = new Mock<IHasher>();
 
             _handler = new LogOutCommandHandler(
                 _unitOfWorkMock.Object,
-                _refreshTokenRepositoryMock.Object,
-                _hasherMock.Object
+                _refreshTokenRepositoryMock.Object
             );
         }
 
