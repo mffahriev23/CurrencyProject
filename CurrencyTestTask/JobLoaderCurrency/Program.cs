@@ -3,11 +3,11 @@ using JobLoaderCurrency.Clients;
 using JobLoaderCurrency.Interfaces.CurrencyLoader;
 using JobLoaderCurrency.Interfaces.Repository;
 using JobLoaderCurrency.Interfaces.Services;
-using JobLoaderCurrency.Interfaces.UnitOfWork;
 using JobLoaderCurrency.Jobs;
 using JobLoaderCurrency.Repositories;
 using JobLoaderCurrency.Services;
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.DAL.Ef;
 
 class Program
 {
@@ -21,7 +21,7 @@ class Program
 
         builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
         builder.Services.AddScoped<IUpdateCurrency, UpdateCurrency>();
-        builder.Services.AddScoped<IUnitOfWork, UnitOfWork<CurrencyServiceContext>>();
+        builder.Services.AddUnitOfWork<CurrencyServiceContext>();
 
         builder.Services.AddDbContext<CurrencyServiceContext>(
             options => options.UseNpgsql(connectionString)

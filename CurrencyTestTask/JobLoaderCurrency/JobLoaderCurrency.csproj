@@ -12,7 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\CurrencyService.Domain\CurrencyService.Domain.csproj" />
+    <ProjectReference Include="..\CurrencyService.Infrastructure.DAL.Common\CurrencyService.Infrastructure.DAL.Common.csproj" />
+    <ProjectReference Include="..\Infrastructure\Infrastructure.DAL.Ef.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace CurrencyService.Application.UnitOfWork
+﻿namespace Application.UnitOfWork
 {
     public interface IUnitOfWork
     {

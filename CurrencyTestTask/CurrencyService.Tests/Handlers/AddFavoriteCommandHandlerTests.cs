@@ -1,6 +1,6 @@
-﻿using CurrencyService.Application.Favorites.Commands.AddFavorite;
+﻿using Application.UnitOfWork;
+using CurrencyService.Application.Favorites.Commands.AddFavorite;
 using CurrencyService.Application.Repositories;
-using CurrencyService.Application.UnitOfWork;
 using CurrencyService.Domain.Entities;
 using Moq;
 

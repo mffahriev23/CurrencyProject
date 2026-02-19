@@ -1,7 +1,7 @@
-﻿using MediatR;
+﻿using Application.UnitOfWork;
+using MediatR;
 using UserService.Application.Interfaces;
 using UserService.Application.Repositories;
-using UserService.Application.UnitOfWork;
 using UserService.Domain.Entities;
 
 namespace UserService.Application.Users.Commands.Registration

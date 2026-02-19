@@ -1,5 +1,5 @@
 ﻿using CurrencyService.Domain.Entities;
-using JobLoaderCurrency.Infrastructure.DAL.Configurations;
+using CurrencyService.Infrastructure.DAL.Common.Configurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace CurrentService.Infrastructure.DAL.Contexts

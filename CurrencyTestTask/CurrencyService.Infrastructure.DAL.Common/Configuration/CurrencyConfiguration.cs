@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace JobLoaderCurrency.Infrastructure.DAL.Configurations
+namespace CurrencyService.Infrastructure.DAL.Common.Configurations
 {
     public class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
     {

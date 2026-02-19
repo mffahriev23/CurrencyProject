@@ -1,8 +1,8 @@
-﻿using Authorization.Interfaces;
+﻿using Application.UnitOfWork;
+using Authorization.Interfaces;
 using MediatR;
 using UserService.Application.Interfaces;
 using UserService.Application.Repositories;
-using UserService.Application.UnitOfWork;
 using UserService.Domain.Entities;
 
 namespace UserService.Application.Users.Commands.Authentication

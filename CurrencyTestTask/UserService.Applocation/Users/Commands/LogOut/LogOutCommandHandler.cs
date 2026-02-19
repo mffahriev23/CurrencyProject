@@ -1,7 +1,6 @@
-﻿using MediatR;
-using UserService.Application.Interfaces;
+﻿using Application.UnitOfWork;
+using MediatR;
 using UserService.Application.Repositories;
-using UserService.Application.UnitOfWork;
 using UserService.Domain.Entities;
 
 namespace UserService.Application.Users.Commands.LogOut
@@ -22,7 +21,7 @@ namespace UserService.Application.Users.Commands.LogOut
 
         public async Task Handle(LogOutCommand request, CancellationToken cancellationToken)
         {
-            RefreshToken refreshToken = await _refreshTokenRepository.Get(
+            RefreshToken? refreshToken = await _refreshTokenRepository.Get(
                 request.UserId,
                 request.RefreshToken,
                 cancellationToken

@@ -1,8 +1,8 @@
-﻿using CurrencyService.Domain.Entities;
+﻿using Application.UnitOfWork;
+using CurrencyService.Domain.Entities;
 using JobLoaderCurrency.Interfaces.CurrencyLoader.Dtos;
 using JobLoaderCurrency.Interfaces.Repository;
 using JobLoaderCurrency.Interfaces.Services;
-using JobLoaderCurrency.Interfaces.UnitOfWork;
 
 namespace JobLoaderCurrency.Services
 {

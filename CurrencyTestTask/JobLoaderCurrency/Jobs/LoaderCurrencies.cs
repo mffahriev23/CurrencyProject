@@ -1,4 +1,4 @@
-using JobLoaderCurrency.Interfaces.CurrencyLoader;
+﻿using JobLoaderCurrency.Interfaces.CurrencyLoader;
 using JobLoaderCurrency.Interfaces.CurrencyLoader.Dtos;
 using JobLoaderCurrency.Interfaces.Services;
 
@@ -31,12 +31,17 @@ namespace JobLoaderCurrency.Jobs
                         ValCursDto data = await client.GetCurrencies(cancellationTocken);
                         ValuteDto[] valutes = data?.Valutes ?? Array.Empty<ValuteDto>();
 
-                    await updater.Execute(data.Valutes, cancellationTocken);
+                        await updater.Execute(data.Valutes, cancellationTocken);
+                    }
+
+                    _logger.LogInformation("Обновление курсов валют завершено.");
+
+                    await Task.Delay(TimeSpan.FromDays(1), cancellationTocken);
                 }
-
-                _logger.LogInformation("Обновление курсов валют завершено.");
-
-                await Task.Delay(TimeSpan.FromDays(1), cancellationTocken);
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Ошибка в работе джобы.");
+                }
             }
         }
     }

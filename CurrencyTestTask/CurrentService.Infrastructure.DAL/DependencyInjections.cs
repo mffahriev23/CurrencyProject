@@ -1,8 +1,7 @@
 ﻿using CurrencyService.Application.Repositories;
-using CurrencyService.Application.UnitOfWork;
 using CurrentService.Infrastructure.DAL.Contexts;
 using CurrentService.Infrastructure.DAL.Repositories;
-using JobLoaderCurrency.Services;
+using Infrastructure.DAL.Ef;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,7 +14,7 @@ namespace CurrentService.Infrastructure.DAL
             string? connectionString
         )
         {
-            services.AddScoped<IUnitOfWork, UnitOfWork<CurrencyServiceContext>>();
+            services.AddUnitOfWork<CurrencyServiceContext>();
             services.AddDbContext<CurrencyServiceContext>(
                 options => options.UseNpgsql(connectionString)
             );

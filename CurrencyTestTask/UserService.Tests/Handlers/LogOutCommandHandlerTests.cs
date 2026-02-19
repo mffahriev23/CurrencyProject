@@ -1,7 +1,6 @@
-﻿using Moq;
-using UserService.Application.Interfaces;
+﻿using Application.UnitOfWork;
+using Moq;
 using UserService.Application.Repositories;
-using UserService.Application.UnitOfWork;
 using UserService.Application.Users.Commands.LogOut;
 using UserService.Domain.Entities;
 

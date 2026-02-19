@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using UserService.Application.UnitOfWork;
+﻿using Application.UnitOfWork;
+using Microsoft.EntityFrameworkCore;
 
-namespace JobLoaderCurrency.Services
+namespace Infrastructure.DAL.Ef.UnitOfWork
 {
     public class UnitOfWork<TDbContext> : IUnitOfWork where TDbContext : DbContext
     {

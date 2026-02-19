@@ -1,11 +1,9 @@
-﻿
-using JobLoaderCurrency.Services;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using UserService.Application.Repositories;
-using UserService.Application.UnitOfWork;
 using UserService.Infrastructure.DAL.Contexts;
 using UserService.Infrastructure.DAL.Repositories;
+using Infrastructure.DAL.Ef;
 
 namespace UserService.Infrastructure.DAL
 {
@@ -16,7 +14,7 @@ namespace UserService.Infrastructure.DAL
             string? connectionString
         )
         {
-            services.AddScoped<IUnitOfWork, UnitOfWork<UserServiceContext>>();
+            services.AddUnitOfWork<UserServiceContext>();
             services.AddDbContext<UserServiceContext>(
                 options => options.UseNpgsql(connectionString)
             );

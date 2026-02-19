@@ -7,12 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\CurrencyService.Domain\CurrencyService.Domain.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.DAL.Ef.csproj" />
-    <ProjectReference Include="..\UserService.Applocation\UserService.Application.csproj" />
   </ItemGroup>
 
 </Project>

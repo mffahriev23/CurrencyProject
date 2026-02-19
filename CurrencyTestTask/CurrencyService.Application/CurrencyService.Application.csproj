@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\CurrencyService.Domain\CurrencyService.Domain.csproj" />
   </ItemGroup>
 

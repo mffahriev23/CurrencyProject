@@ -1,4 +1,5 @@
 ﻿using CurrencyService.Domain.Entities;
+using CurrencyService.Infrastructure.DAL.Common.Configurations;
 using CurrentService.Infrastructure.DAL.Configurations;
 using CurrentService.Infrastructure.DAL.Interceptors;
 using MediatR;

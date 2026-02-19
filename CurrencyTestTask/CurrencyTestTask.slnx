@@ -1,7 +1,10 @@
 <Solution>
   <Folder Name="/Common/">
+    <Project Path="Application/Application.csproj" Id="1b4d49b7-6cb7-4df2-b9c5-6954445e7178" />
     <Project Path="Authorization/Authorization.csproj" Id="dee34165-e0eb-41b7-b445-be9734d900ef" />
+    <Project Path="CurrencyService.Infrastructure.DAL.Common/CurrencyService.Infrastructure.DAL.Common.csproj" Id="beebc5c8-3434-40d1-ac87-483e25471adc" />
     <Project Path="D:/projects/СurrencyTestTask/CurrencyTestTask/Domain/Domain.csproj" />
+    <Project Path="Infrastructure/Infrastructure.DAL.Ef.csproj" Id="4dd1d812-17b7-47b3-b77f-c2de1b322fa6" />
   </Folder>
   <Folder Name="/CurrencyService/">
     <Project Path="CurrencyService.Contracts/CurrencyService.Contracts.csproj" Id="8130f00d-4bda-449b-8746-d7f15cb67b16" />

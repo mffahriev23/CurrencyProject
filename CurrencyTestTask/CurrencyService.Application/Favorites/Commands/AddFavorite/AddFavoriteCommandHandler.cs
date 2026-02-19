@@ -1,5 +1,5 @@
-﻿using CurrencyService.Application.Repositories;
-using CurrencyService.Application.UnitOfWork;
+﻿using Application.UnitOfWork;
+using CurrencyService.Application.Repositories;
 using CurrencyService.Domain.Entities;
 using MediatR;
 
