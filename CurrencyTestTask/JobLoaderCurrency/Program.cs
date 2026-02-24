@@ -8,6 +8,7 @@ using JobLoaderCurrency.Repositories;
 using JobLoaderCurrency.Services;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.DAL.Ef;
+using JobLoaderCurrency;
 
 class Program
 {
@@ -16,8 +17,9 @@ class Program
         System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+        IConfiguration configuration = builder.Configuration;
 
-        string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        string? connectionString = configuration.GetConnectionString("DefaultConnection");
 
         builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
         builder.Services.AddScoped<IUpdateCurrency, UpdateCurrency>();
@@ -27,8 +29,9 @@ class Program
             options => options.UseNpgsql(connectionString)
         );
 
-        builder.Services.AddHttpClient<ICurrencyLoaderClient, CurrencyLoaderClient>(
-            client => client.BaseAddress = new Uri("https://www.cbr.ru")
+        builder.Services.RegistrationHttpClient<ICurrencyLoaderClient, CurrencyLoaderClient>(
+            "Cbc",
+            configuration
         );
 
         builder.Services.AddHostedService<LoaderCurrencies>();

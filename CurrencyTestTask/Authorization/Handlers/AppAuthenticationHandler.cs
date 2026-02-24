@@ -10,13 +10,13 @@ namespace Authorization.Handlers
 {
     internal class AppAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
-        private readonly IJwtManager _jwtManager;
+        private readonly IJwtReader _jwtManager;
         const string _headerName = "Authorization";
 
         public AppAuthenticationHandler(
                 UrlEncoder encoder,
                 ILoggerFactory loggerFactory,
-                IJwtManager jwtManager,
+                IJwtReader jwtManager,
                 IOptionsMonitor<AuthenticationSchemeOptions> optionMonitor
             ) : base(optionMonitor, loggerFactory, encoder)
         {

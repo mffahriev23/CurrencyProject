@@ -13,14 +13,14 @@ namespace UserService.Application.Users.Commands.Refresh
         readonly IUserRepository _userRepository;
         readonly IRefreshTokenRepository _refreshTokenRepository;
         readonly IUnitOfWork _unitOfWork;
-        readonly IJwtManager _jwtManager;
+        readonly IJwtFactory _jwtManager;
 
         public RefreshCommandHandler(
             IHasher hasher,
             IUserRepository userRepository,
             IRefreshTokenRepository refreshTokenRepository,
             IUnitOfWork unitOfWork,
-            IJwtManager jwtManager
+            IJwtFactory jwtManager
         )
         {
             _hasher = hasher;

@@ -16,7 +16,7 @@ class Program
 
         builder.Services.AddApplocatiinServices()
             .AddDALServices(connectionString)
-            .AddHandler();
+            .AddHandler(builder.Configuration);
 
         var app = builder.Build();
 

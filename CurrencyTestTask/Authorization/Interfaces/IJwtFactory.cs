@@ -2,10 +2,8 @@
 
 namespace Authorization.Interfaces
 {
-    public interface IJwtManager
+    public interface IJwtFactory
     {
         string GetJwtToken(Guid userId, string name);
-
-        Claim[] GetClaims(string jwtText, bool validateExpirationTime);
     }
 }

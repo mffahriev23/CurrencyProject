@@ -1,4 +1,4 @@
-using Authorization.Interfaces;
+﻿using Authorization.Interfaces;
 using Moq;
 using UserService.Application.Interfaces;
 using UserService.Application.Repositories;
@@ -14,7 +14,7 @@ namespace UserService.Tests.Handlers
         private readonly Mock<IUserRepository> _userRepositoryMock;
         private readonly Mock<IRefreshTokenRepository> _refreshTokenRepositoryMock;
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-        private readonly Mock<IJwtManager> _jwtManagerMock;
+        private readonly Mock<IJwtFactory> _jwtManagerMock;
         private readonly RefreshCommandHandler _handler;
 
         public RefreshCommandHandlerTests()
@@ -23,7 +23,7 @@ namespace UserService.Tests.Handlers
             _userRepositoryMock = new Mock<IUserRepository>();
             _refreshTokenRepositoryMock = new Mock<IRefreshTokenRepository>();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _jwtManagerMock = new Mock<IJwtManager>();
+            _jwtManagerMock = new Mock<IJwtFactory>();
 
             _handler = new RefreshCommandHandler(
                 _hasherMock.Object,

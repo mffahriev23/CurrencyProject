@@ -6,12 +6,12 @@ namespace JobLoaderCurrency.Jobs
 {
     public class LoaderCurrencies : BackgroundService
     {
-        readonly IServiceProvider _services;
+        readonly IServiceScopeFactory _serviceScopeFactory;
         readonly ILogger<LoaderCurrencies> _logger;
 
-        public LoaderCurrencies(IServiceProvider services, ILogger<LoaderCurrencies> logger)
+        public LoaderCurrencies(IServiceScopeFactory serviceScopeFactory, ILogger<LoaderCurrencies> logger)
         {
-            _services = services;
+            _serviceScopeFactory = serviceScopeFactory;
             _logger = logger;
         }
 
@@ -23,7 +23,7 @@ namespace JobLoaderCurrency.Jobs
 
                 try
                 {
-                    using (IServiceScope scope = _services.CreateScope())
+                    using (IServiceScope scope = _serviceScopeFactory.CreateScope())
                     {
                         ICurrencyLoaderClient client = scope.ServiceProvider.GetRequiredService<ICurrencyLoaderClient>();
                         IUpdateCurrency updater = scope.ServiceProvider.GetRequiredService<IUpdateCurrency>();

@@ -16,7 +16,7 @@ class Program
 
         builder.Services.AddApplicationServices()
             .AddDALServices(connectionString)
-            .AddHandler();
+            .AddHandler(builder.Configuration);
 
         WebApplication app = builder.Build();
 

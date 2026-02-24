@@ -1,4 +1,5 @@
-﻿using ApiGateway.Clients;
+﻿using ApiGateway;
+using ApiGateway.Clients;
 using ApiGateway.Interfaces.UserService;
 using Authorization;
 
@@ -8,18 +9,22 @@ class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        IConfiguration configuration = builder.Configuration;
+
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        builder.Services.AddHandler();
+        builder.Services.AddHandler(configuration);
 
-        builder.Services.AddHttpClient<IUserServiceClient, UserServiceClient>(
-            client => client.BaseAddress = new Uri("https://localhost:7028")
+        builder.Services.RegistrationHttpClient<IUserServiceClient, UserServiceClient>(
+            "UserService",
+            configuration
         );
 
-        builder.Services.AddHttpClient<ICurrencyServiceClient, CurrencyServiceClient> (
-            client => client.BaseAddress = new Uri("https://localhost:7049")
+        builder.Services.RegistrationHttpClient<ICurrencyServiceClient, CurrencyServiceClient>(
+            "CurrencyService",
+            configuration
         );
 
         var app = builder.Build();
