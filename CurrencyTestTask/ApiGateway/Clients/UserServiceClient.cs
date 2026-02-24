@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using ApiGateway.Interfaces.UserService;
+using Authorization.Exceptions;
 using UserService.Contracts.Users.Authentication;
 using UserService.Contracts.Users.Logout;
 using UserService.Contracts.Users.Refresh;
@@ -31,6 +32,11 @@ namespace ApiGateway.Clients
                 cancellationToken
             );
 
+            if (!message.IsSuccessStatusCode)
+            {
+                await HandleError(message, cancellationToken);
+            }
+
             return await message.Content.ReadFromJsonAsync<AuthenticationResponse>(cancellationToken);
         }
 
@@ -43,6 +49,11 @@ namespace ApiGateway.Clients
                 request.Body,
                 cancellationToken
             );
+
+            if (!message.IsSuccessStatusCode)
+            {
+                await HandleError(message, cancellationToken);
+            }
         }
 
         public async Task<RefreshTokenResponse?> RefreshToken(
@@ -59,6 +70,11 @@ namespace ApiGateway.Clients
                 cancellationToken
             );
 
+            if (!message.IsSuccessStatusCode)
+            {
+                await HandleError(message, cancellationToken);
+            }
+
             return await message.Content.ReadFromJsonAsync<RefreshTokenResponse>(cancellationToken);
         }
 
@@ -69,6 +85,28 @@ namespace ApiGateway.Clients
                 request.Body,
                 cancellationToken
             );
+        }
+
+        private Task HandleError(HttpResponseMessage message, CancellationToken cancellationToken)
+        {
+            switch (message.StatusCode)
+            {
+                case System.Net.HttpStatusCode.BadRequest:
+                {
+                    return Handle400Error(message, cancellationToken);
+                }
+                default:
+                {
+                    throw new InternalServerErrorException("Неизвестная внутренняя ошибка сервиса.");
+                }
+            }
+        }
+
+        private async Task Handle400Error(HttpResponseMessage message, CancellationToken cancellationToken)
+        {
+            string errorContent = await message.Content.ReadAsStringAsync();
+
+            throw new ExternalServiceReturnedBadRequestException(errorContent);
         }
     }
 }

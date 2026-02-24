@@ -18,7 +18,7 @@ namespace Authorization.Services
             _jwtSecret = options.Value.Secret!;
         }
 
-        public Claim[] GetClaims(string jwtText, bool validateExpirationTime)
+        public Claim[] GetAccessTokenClaims(string jwtText, bool validateExpirationTime)
         {
             JwtBuilder jwt = JwtBuilder.Create()
                 .WithAlgorithm(new HMACSHA256Algorithm())
@@ -30,11 +30,30 @@ namespace Authorization.Services
                         ValidateExpirationTime = validateExpirationTime
                     });
 
-            AuthorizationClaims claims = jwt.Decode<AuthorizationClaims>(jwtText);
+            AccessTokenClaims claims = jwt.Decode<AccessTokenClaims>(jwtText);
 
             return [
-                new(nameof(AuthorizationClaims.Name), claims.Name),
-                new(nameof(AuthorizationClaims.UserId), claims.UserId)
+                new(nameof(AccessTokenClaims.Name), claims.Name),
+                new(nameof(AccessTokenClaims.UserId), claims.UserId)
+            ];
+        }
+
+        public Claim[] GetRefreshTokenClaims(string jwtText)
+        {
+            JwtBuilder jwt = JwtBuilder.Create()
+                .WithAlgorithm(new HMACSHA256Algorithm())
+                .WithSecret(_jwtSecret)
+                .WithValidationParameters(
+                    new ValidationParameters
+                    {
+                        ValidateSignature = true,
+                        ValidateExpirationTime = true
+                    });
+
+            RefreshTokenClaims claims = jwt.Decode<RefreshTokenClaims>(jwtText);
+
+            return [
+                new(nameof(RefreshTokenClaims.Key), claims.Key)
             ];
         }
     }

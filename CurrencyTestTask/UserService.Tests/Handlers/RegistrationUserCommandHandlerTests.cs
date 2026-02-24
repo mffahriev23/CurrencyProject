@@ -1,7 +1,8 @@
+﻿using Application.UnitOfWork;
+using Authorization.Exceptions;
 using Moq;
 using UserService.Application.Interfaces;
 using UserService.Application.Repositories;
-using UserService.Application.UnitOfWork;
 using UserService.Application.Users.Commands.Registration;
 using UserService.Domain.Entities;
 
@@ -36,7 +37,7 @@ namespace UserService.Tests.Handlers
                 "password2"
             );
 
-            await Assert.ThrowsAsync<ArgumentException>(
+            await Assert.ThrowsAsync<BadRequestException>(
                 () => _handler.Handle(command, CancellationToken.None)
             );
         }

@@ -1,6 +1,11 @@
-﻿using Application.UnitOfWork;
+﻿using System.Security.Claims;
+using Application.UnitOfWork;
+using Authorization.Exceptions;
+using Authorization.Extensions;
 using Authorization.Interfaces;
+using Authorization.Options;
 using MediatR;
+using Microsoft.Extensions.Options;
 using UserService.Application.Interfaces;
 using UserService.Application.Repositories;
 using UserService.Domain.Entities;
@@ -9,21 +14,24 @@ namespace UserService.Application.Users.Commands.Refresh
 {
     public class RefreshCommandHandler : IRequestHandler<RefreshCommand, RefreshResult>
     {
-        readonly IHasher _hasher;
+        readonly int _refreshTokenExpiration;
+        readonly IJwtReader _jwtReader;
         readonly IUserRepository _userRepository;
         readonly IRefreshTokenRepository _refreshTokenRepository;
         readonly IUnitOfWork _unitOfWork;
         readonly IJwtFactory _jwtManager;
 
         public RefreshCommandHandler(
-            IHasher hasher,
+            IOptions<JwtManagerOptions> jwtManagerOptions,
+            IJwtReader jwtReader,
             IUserRepository userRepository,
             IRefreshTokenRepository refreshTokenRepository,
             IUnitOfWork unitOfWork,
             IJwtFactory jwtManager
         )
         {
-            _hasher = hasher;
+            _refreshTokenExpiration = jwtManagerOptions.Value.ExpirationRefreshTokenOnDay!.Value;
+            _jwtReader = jwtReader;
             _userRepository = userRepository;
             _refreshTokenRepository = refreshTokenRepository;
             _unitOfWork = unitOfWork;
@@ -39,27 +47,31 @@ namespace UserService.Application.Users.Commands.Refresh
                 request.UserId,
                 cancellationToken
             )
-                ?? throw new ArgumentNullException("Пользователь не наден.");
+                ?? throw new BadRequestException("Пользователь не наден.");
+
+            Guid refreshKey = _jwtReader.GetRefreshTokenClaims(request.RefreshToken)
+                .GetRefreshKey();
 
             RefreshToken? oldRefreshToken = await _refreshTokenRepository.Get(
                 request.UserId,
-                request.RefreshToken,
+                refreshKey.ToString(),
                 cancellationToken
             )
-                ?? throw new ArgumentException("Токен обновления в бд не найден, либо недоступен.");
+                ?? throw new BadRequestException("Токен обновления в бд не найден, либо недоступен.");
 
             oldRefreshToken.IsRevoked = true;
 
-            string newRefreshTokenText = Guid.NewGuid().ToString();
+            Guid newRefreshKey = Guid.NewGuid();
+            string newRefreshTokenText = _jwtManager.GetJwtToken(newRefreshKey);
             string accessToken = _jwtManager.GetJwtToken(user.Id, user.Name);
 
             RefreshToken newRefreshToken = new()
             {
                 Id = Guid.NewGuid(),
                 Created = DateTime.UtcNow,
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddDays(_refreshTokenExpiration),
                 UserId = user.Id,
-                HashToken = newRefreshTokenText,
+                HashToken = newRefreshKey.ToString(),
                 IsRevoked = false
             };
 

@@ -2,7 +2,7 @@
 
 namespace Authorization.Dtos
 {
-    public record AuthorizationClaims
+    public record AccessTokenClaims
     {
         public string UserId {  get; init; }
 

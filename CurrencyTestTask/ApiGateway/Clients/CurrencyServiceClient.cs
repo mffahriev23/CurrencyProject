@@ -1,4 +1,5 @@
 ﻿using ApiGateway.Interfaces.UserService;
+using Authorization.Exceptions;
 using CurrencyService.Contracts.Currency.GetAllNames;
 using CurrencyService.Contracts.Favorite.AddFavorite;
 using CurrencyService.Contracts.Favorite.DeleteFavorite;
@@ -33,6 +34,11 @@ namespace ApiGateway.Clients
                 request.Body,
                 cancellationToken
             );
+
+            if (!message.IsSuccessStatusCode)
+            {
+                await HandleError(message, cancellationToken);
+            }
         }
 
         public async Task DeleteFavorite(
@@ -48,6 +54,11 @@ namespace ApiGateway.Clients
                 request.Body,
                 cancellationToken
             );
+
+            if (!message.IsSuccessStatusCode)
+            {
+                await HandleError(message, cancellationToken);
+            }
         }
 
         public async Task<FavoritesResponse?> GetActiveFavorite(
@@ -58,6 +69,11 @@ namespace ApiGateway.Clients
             _client.DefaultRequestHeaders.Add("Authorization", accessToken);
 
             using HttpResponseMessage response = await _client.GetAsync(_getActiveFavorite, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await HandleError(response, cancellationToken);
+            }
 
             return await response.Content.ReadFromJsonAsync<FavoritesResponse>(cancellationToken);
         }
@@ -71,7 +87,34 @@ namespace ApiGateway.Clients
 
             using HttpResponseMessage response = await _client.GetAsync(_getAllEndpoint, cancellationToken);
 
+            if (!response.IsSuccessStatusCode)
+            {
+                await HandleError(response, cancellationToken);
+            }
+
             return await response.Content.ReadFromJsonAsync<GetAllNamesResponse>(cancellationToken);
+        }
+
+        private Task HandleError(HttpResponseMessage message, CancellationToken cancellationToken)
+        {
+            switch (message.StatusCode)
+            {
+                case System.Net.HttpStatusCode.BadRequest:
+                {
+                    return Handle400Error(message, cancellationToken);
+                }
+                default:
+                {
+                    throw new InternalServerErrorException("Неизвестная внутренняя ошибка сервиса.");
+                }
+            }
+        }
+
+        private async Task Handle400Error(HttpResponseMessage message, CancellationToken cancellationToken)
+        {
+            string errorContent = await message.Content.ReadAsStringAsync();
+
+            throw new ExternalServiceReturnedBadRequestException(errorContent);
         }
     }
 }

@@ -4,6 +4,8 @@
     {
         public string? Secret { get; init; }
 
-        public int? ExpirationTimesOnMinutes { get; init; }
+        public int? ExpirationAccessTokenOnMinutes { get; init; }
+
+        public int? ExpirationRefreshTokenOnDay { get; init; }
     }
 }

@@ -12,13 +12,22 @@ class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        IConfiguration configuration = builder.Configuration;
+
         string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
         builder.Services.AddApplicationServices()
             .AddDALServices(connectionString)
-            .AddHandler(builder.Configuration);
+            .AddAuthorizationHandler(configuration);
+
+        builder.Services.AddGlobalExceptionGandler(
+            configuration,
+            builder.Host
+        );
 
         WebApplication app = builder.Build();
+
+        app.UseExceptionHandler();
 
         if (app.Environment.IsDevelopment())
         {

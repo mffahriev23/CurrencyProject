@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using System.Xml.Linq;
 using Authorization.Dtos;
 using Authorization.Interfaces;
 using Authorization.Options;
@@ -12,23 +13,35 @@ namespace Authorization.Services
     public class JwtFactory : IJwtFactory
     {
         readonly string _jwtSecret;
-        readonly int _expirationTime;
+        readonly int _expirationAccessTokenTime;
+        readonly int _expirationRefreshTokenTime;
 
         public JwtFactory(IOptions<JwtManagerOptions> options)
         {
             _jwtSecret = options.Value.Secret!;
-            _expirationTime = options.Value.ExpirationTimesOnMinutes!.Value;
+            _expirationAccessTokenTime = options.Value.ExpirationAccessTokenOnMinutes!.Value;
+            _expirationRefreshTokenTime = options.Value.ExpirationRefreshTokenOnDay!.Value;
         }
 
         public string GetJwtToken(Guid userId, string name)
         {
             return JwtBuilder.Create()
                 .WithAlgorithm(new HMACSHA256Algorithm())
-                .AddClaim(nameof(AuthorizationClaims.UserId), userId.ToString())
-                .AddClaim(nameof(AuthorizationClaims.Name), name)
+                .AddClaim(nameof(AccessTokenClaims.UserId), userId.ToString())
+                .AddClaim(nameof(AccessTokenClaims.Name), name)
                 .WithSecret(_jwtSecret)
-                .ExpirationTime(DateTime.UtcNow.AddMinutes(_expirationTime))
+                .ExpirationTime(DateTime.UtcNow.AddMinutes(_expirationAccessTokenTime))
                 .Encode();
+        }
+
+        public string GetJwtToken(Guid key)
+        {
+            return JwtBuilder.Create()
+               .WithAlgorithm(new HMACSHA256Algorithm())
+               .AddClaim(nameof(RefreshTokenClaims.Key), key.ToString())
+               .WithSecret(_jwtSecret)
+               .ExpirationTime(DateTime.UtcNow.AddDays(_expirationRefreshTokenTime))
+               .Encode();
         }
     }
 }

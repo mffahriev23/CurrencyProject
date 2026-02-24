@@ -4,6 +4,8 @@ namespace Authorization.Interfaces
 {
     public interface IJwtReader
     {
-        Claim[] GetClaims(string jwtText, bool validateExpirationTime);
+        Claim[] GetAccessTokenClaims(string jwtText, bool validateExpirationTime);
+
+        Claim[] GetRefreshTokenClaims(string jwtText);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Application.UnitOfWork;
+using Authorization.Exceptions;
 using MediatR;
 using UserService.Application.Interfaces;
 using UserService.Application.Repositories;
@@ -28,7 +29,7 @@ namespace UserService.Application.Users.Commands.Registration
         {
             if (!request.Password.Equals(request.DoublePassword))
             {
-                throw new ArgumentException("Введённые пароли не совпадают");
+                throw new BadRequestException("Введённые пароли не совпадают");
             }
 
             User user = new()

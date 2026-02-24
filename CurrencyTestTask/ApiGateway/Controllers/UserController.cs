@@ -29,6 +29,7 @@ namespace ApiGateway.Controllers
         }
 
         [HttpPost("registration")]
+        [AllowAnonymous]
         public async Task<IActionResult> Registration(RegistrationRequest request, CancellationToken cancellationToken)
         {
              await _userServiceClient.Registration(
@@ -40,6 +41,7 @@ namespace ApiGateway.Controllers
         }
 
         [HttpPost("authentication")]
+        [AllowAnonymous]
         public async Task<IActionResult> Authentication(AuthenticationRequest request, CancellationToken cancellationToken)
         {
             AuthenticationResponse response = await _userServiceClient.Authentication(

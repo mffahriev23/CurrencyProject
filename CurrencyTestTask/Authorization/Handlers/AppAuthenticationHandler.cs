@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Text.Encodings.Web;
 using Authorization.Attributes;
+using Authorization.Exceptions;
 using Authorization.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -40,12 +41,12 @@ namespace Authorization.Handlers
 
                 if (string.IsNullOrEmpty(jwtText))
                 {
-                    throw new ArgumentException("Authorization не был найден");
+                    throw new BadRequestException("Authorization не был найден");
                 }
 
                 try
                 {
-                    Claim[] claims = _jwtManager.GetClaims(jwtText, validateExpirationTime);
+                    Claim[] claims = _jwtManager.GetAccessTokenClaims(jwtText, validateExpirationTime);
                     ClaimsIdentity identity = new(claims, Scheme.Name);
                     ClaimsPrincipal principal = new(identity);
                     AuthenticationTicket ticket = new(principal, Scheme.Name);

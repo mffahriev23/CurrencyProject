@@ -15,7 +15,7 @@ class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        builder.Services.AddHandler(configuration);
+        builder.Services.AddAuthorizationHandler(configuration);
 
         builder.Services.RegistrationHttpClient<IUserServiceClient, UserServiceClient>(
             "UserService",
@@ -27,7 +27,14 @@ class Program
             configuration
         );
 
+        builder.Services.AddGlobalExceptionGandler(
+            configuration,
+            builder.Host
+        );
+
         var app = builder.Build();
+
+        app.UseExceptionHandler();
 
         if (app.Environment.IsDevelopment())
         {

@@ -1,6 +1,9 @@
 ﻿using Application.UnitOfWork;
+using Authorization.Exceptions;
 using Authorization.Interfaces;
+using Authorization.Options;
 using MediatR;
+using Microsoft.Extensions.Options;
 using UserService.Application.Interfaces;
 using UserService.Application.Repositories;
 using UserService.Domain.Entities;
@@ -9,6 +12,7 @@ namespace UserService.Application.Users.Commands.Authentication
 {
     public class AuthenticationCommandHandler : IRequestHandler<AuthenticationCommand, AuthenticationResult>
     {
+        readonly int _refreshTokenExpiration;
         readonly IHasher _hasher;
         readonly IUserRepository _userRepository;
         readonly IRefreshTokenRepository _refreshTokenRepository;
@@ -16,6 +20,7 @@ namespace UserService.Application.Users.Commands.Authentication
         readonly IJwtFactory _jwtManager;
 
         public AuthenticationCommandHandler(
+            IOptions<JwtManagerOptions> jwtManagerOptions,
             IHasher passwordHasher,
             IUserRepository userRepository,
             IRefreshTokenRepository refreshTokenRepository,
@@ -23,6 +28,7 @@ namespace UserService.Application.Users.Commands.Authentication
             IJwtFactory jwtManager
         )
         {
+            _refreshTokenExpiration = jwtManagerOptions.Value.ExpirationRefreshTokenOnDay!.Value;
             _hasher = passwordHasher;
             _userRepository = userRepository;
             _refreshTokenRepository = refreshTokenRepository;
@@ -33,23 +39,24 @@ namespace UserService.Application.Users.Commands.Authentication
         public async Task<AuthenticationResult> Handle(AuthenticationCommand request, CancellationToken cancellationToken)
         {
             User? user = await _userRepository.GetUser(request.Name, cancellationToken)
-                ?? throw new ArgumentException($"Пользователь с именем {request.Name} не найден.");
+                ?? throw new BadRequestException($"Пользователь с именем {request.Name} не найден.");
 
             if (!_hasher.VerifyText(user.Password, request.Password))
             {
-                throw new ArgumentException($"Введён некорректный пароль.");
+                throw new BadRequestException($"Введён некорректный пароль.");
             }
 
-            string refreshTokenText = Guid.NewGuid().ToString();
+            Guid refreshTokenKey = Guid.NewGuid();
+            string refreshTokenText = _jwtManager.GetJwtToken(refreshTokenKey);
             string accessToken = _jwtManager.GetJwtToken(user.Id, user.Name);
 
             RefreshToken refreshToken = new()
             {
                 Id = Guid.NewGuid(),
                 Created = DateTime.UtcNow,
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddDays(_refreshTokenExpiration),
                 UserId = user.Id,
-                HashToken = refreshTokenText,
+                HashToken = refreshTokenKey.ToString(),
                 IsRevoked = false
             };
 

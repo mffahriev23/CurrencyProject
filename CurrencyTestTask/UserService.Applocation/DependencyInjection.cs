@@ -6,7 +6,7 @@ namespace UserService.Application
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddApplocatiinServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicatiinServices(this IServiceCollection services)
         {
             services.AddMediatR(options => options.RegisterServicesFromAssemblyContaining(typeof(DependencyInjection)));
             services.AddInternalServices();

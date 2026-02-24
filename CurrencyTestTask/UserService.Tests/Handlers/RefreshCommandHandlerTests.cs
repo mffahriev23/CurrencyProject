@@ -1,8 +1,9 @@
-﻿using Authorization.Interfaces;
+﻿using Application.UnitOfWork;
+using Authorization.Exceptions;
+using Authorization.Interfaces;
 using Moq;
 using UserService.Application.Interfaces;
 using UserService.Application.Repositories;
-using UserService.Application.UnitOfWork;
 using UserService.Application.Users.Commands.Refresh;
 using UserService.Domain.Entities;
 
@@ -102,7 +103,7 @@ namespace UserService.Tests.Handlers
 
             RefreshCommand command = new(Guid.NewGuid(), "token");
 
-            await Assert.ThrowsAsync<ArgumentNullException>(
+            await Assert.ThrowsAsync<BadRequestException>(
                 () => _handler.Handle(command, CancellationToken.None)
             );
         }
@@ -129,7 +130,7 @@ namespace UserService.Tests.Handlers
 
             RefreshCommand command = new(userId, "token");
 
-            await Assert.ThrowsAsync<ArgumentException>(
+            await Assert.ThrowsAsync<BadRequestException>(
                 () => _handler.Handle(command, CancellationToken.None)
             );
         }
