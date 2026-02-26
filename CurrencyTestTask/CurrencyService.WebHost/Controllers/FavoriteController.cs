@@ -1,4 +1,4 @@
-﻿using Authorization.Extensions;
+﻿using Application.Extensions;
 using CurrencyService.Application.Favorites.Commands.AddFavorite;
 using CurrencyService.Application.Favorites.Commands.RemoveFavorite;
 using CurrencyService.Application.Favorites.Queries.GetFavorites;

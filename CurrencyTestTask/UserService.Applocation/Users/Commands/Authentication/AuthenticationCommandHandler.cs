@@ -1,7 +1,7 @@
 ﻿using Application.UnitOfWork;
-using Authorization.Exceptions;
-using Authorization.Interfaces;
-using Authorization.Options;
+using Application.Exceptions;
+using Application.Interfaces;
+using Application.Options;
 using MediatR;
 using Microsoft.Extensions.Options;
 using UserService.Application.Interfaces;

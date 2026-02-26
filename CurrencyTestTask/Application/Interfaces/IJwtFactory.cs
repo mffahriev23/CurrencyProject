@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace Authorization.Interfaces
+namespace Application.Interfaces
 {
     public interface IJwtFactory
     {

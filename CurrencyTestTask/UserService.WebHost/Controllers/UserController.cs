@@ -1,5 +1,5 @@
 ﻿using Authorization.Attributes;
-using Authorization.Extensions;
+using Application.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

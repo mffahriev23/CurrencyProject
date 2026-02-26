@@ -1,6 +1,8 @@
 ﻿using Authorization;
+using Serilog;
 using UserService.Application;
 using UserService.Infrastructure.DAL;
+using Application;
 
 class Program
 {
@@ -18,12 +20,13 @@ class Program
 
         builder.Services.AddApplicatiinServices()
             .AddDALServices(connectionString)
-            .AddAuthorizationHandler(configuration);
+            .AddAuthorizationServices(configuration)
+            .AddAuthorizationHandler();
 
-        builder.Services.AddGlobalExceptionGandler(
+        builder.Services.AddSerilog(
             configuration,
             builder.Host
-        );
+        ).AddGlobalExceptionGandler();
 
         var app = builder.Build();
 

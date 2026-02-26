@@ -1,4 +1,4 @@
-﻿namespace Authorization.Options
+﻿namespace Application.Options
 {
     public record JwtManagerOptions
     {

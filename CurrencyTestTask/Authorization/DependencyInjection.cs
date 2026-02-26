@@ -1,8 +1,8 @@
 ﻿using Authorization.Handlers;
-using Authorization.Interfaces;
+using Application.Interfaces;
 using Authorization.Middlewares;
-using Authorization.Options;
-using Authorization.Services;
+using Application.Options;
+using Application.Services;
 using Microsoft.AspNetCore.Authentication;
 using Serilog;
 using Serilog.Exceptions;
@@ -12,15 +12,9 @@ namespace Authorization
     public static class DependencyInjection
     {
         public static IServiceCollection AddAuthorizationHandler(
-            this IServiceCollection services,
-            IConfiguration configuration
+            this IServiceCollection services
         )
         {
-            services.Configure<JwtManagerOptions>(configuration.GetSection(nameof(JwtManagerOptions)));
-
-            services.AddTransient<IJwtFactory, JwtFactory>();
-            services.AddTransient<IJwtReader, JwtReader>();
-
             services.AddAuthentication("CustomScheme")
                 .AddScheme<AuthenticationSchemeOptions, AppAuthenticationHandler>("CustomScheme", null);
 
@@ -28,19 +22,9 @@ namespace Authorization
         }
 
         public static IServiceCollection AddGlobalExceptionGandler(
-            this IServiceCollection services,
-            IConfiguration configuration,
-            IHostBuilder hostBuilder
+            this IServiceCollection services
         )
         {
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
-                .Enrich.WithExceptionDetails()
-                .WriteTo.Console()
-                .CreateLogger();
-
-            hostBuilder.UseSerilog();
-
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
 

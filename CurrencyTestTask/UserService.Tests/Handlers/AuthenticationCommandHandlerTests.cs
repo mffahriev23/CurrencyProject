@@ -1,6 +1,8 @@
 ﻿using Application.UnitOfWork;
-using Authorization.Exceptions;
-using Authorization.Interfaces;
+using Application.Exceptions;
+using Application.Interfaces;
+using Application.Options;
+using Microsoft.Extensions.Options;
 using Moq;
 using UserService.Application.Interfaces;
 using UserService.Application.Repositories;
@@ -16,6 +18,7 @@ namespace UserService.Tests.Handlers
         private readonly Mock<IRefreshTokenRepository> _refreshTokenRepositoryMock;
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
         private readonly Mock<IJwtFactory> _jwtManagerMock;
+        private readonly Mock<IOptions<JwtManagerOptions>> _jwtManagerOptionsMock;
         private readonly AuthenticationCommandHandler _handler;
 
         public AuthenticationCommandHandlerTests()
@@ -25,8 +28,10 @@ namespace UserService.Tests.Handlers
             _refreshTokenRepositoryMock = new Mock<IRefreshTokenRepository>();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
             _jwtManagerMock = new Mock<IJwtFactory>();
+            _jwtManagerOptionsMock = new Mock<IOptions<JwtManagerOptions>>();
 
             _handler = new AuthenticationCommandHandler(
+                _jwtManagerOptionsMock.Object,
                 _hasherMock.Object,
                 _userRepositoryMock.Object,
                 _refreshTokenRepositoryMock.Object,

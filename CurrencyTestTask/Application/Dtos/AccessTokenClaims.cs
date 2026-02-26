@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Authorization.Dtos
+namespace Application.Dtos
 {
     public record AccessTokenClaims
     {

@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
-using Authorization.Dtos;
+using Application.Dtos;
 
-namespace Authorization.Extensions
+namespace Application.Extensions
 {
     public static class ClaimsExtensions
     {

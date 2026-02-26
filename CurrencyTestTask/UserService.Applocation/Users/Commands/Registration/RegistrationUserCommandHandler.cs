@@ -1,5 +1,5 @@
 ﻿using Application.UnitOfWork;
-using Authorization.Exceptions;
+using Application.Exceptions;
 using MediatR;
 using UserService.Application.Interfaces;
 using UserService.Application.Repositories;

@@ -1,4 +1,4 @@
-﻿using Authorization.Exceptions;
+﻿using Application.Exceptions;
 
 namespace ApiGateway.Clients
 {

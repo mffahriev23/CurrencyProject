@@ -2,6 +2,7 @@
 using ApiGateway.Clients;
 using ApiGateway.Interfaces.UserService;
 using Authorization;
+using Application;
 
 class Program
 {
@@ -15,7 +16,9 @@ class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        builder.Services.AddAuthorizationHandler(configuration);
+        builder.Services
+            .AddAuthorizationServices(configuration)
+            .AddAuthorizationHandler();
 
         builder.Services.RegistrationHttpClient<IUserServiceClient, UserServiceClient>(
             "UserService",
@@ -27,10 +30,10 @@ class Program
             configuration
         );
 
-        builder.Services.AddGlobalExceptionGandler(
+        builder.Services.AddSerilog(
             configuration,
             builder.Host
-        );
+        ).AddGlobalExceptionGandler();
 
         var app = builder.Build();
 

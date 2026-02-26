@@ -1,4 +1,4 @@
-﻿namespace Authorization.Dtos
+﻿namespace Application.Dtos
 {
     public record RefreshTokenClaims
     {

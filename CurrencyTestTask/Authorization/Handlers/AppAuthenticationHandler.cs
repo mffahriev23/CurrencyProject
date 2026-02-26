@@ -1,8 +1,8 @@
 ﻿using System.Security.Claims;
 using System.Text.Encodings.Web;
+using Application.Exceptions;
 using Authorization.Attributes;
-using Authorization.Exceptions;
-using Authorization.Interfaces;
+using Application.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
@@ -33,7 +33,7 @@ namespace Authorization.Handlers
 
                 if (!Request.Headers.ContainsKey(_headerName))
                 {
-                    return AuthenticateResult.Fail("Пользователь не аутентифицирован.");
+                    throw new ForbiddenException("Пользователь не аутентифицирован.");
                 }
 
                 Microsoft.Extensions.Primitives.StringValues headerAuth = Request.Headers[_headerName];
@@ -41,7 +41,7 @@ namespace Authorization.Handlers
 
                 if (string.IsNullOrEmpty(jwtText))
                 {
-                    throw new BadRequestException("Authorization не был найден");
+                    throw new ForbiddenException("Authorization не был найден");
                 }
 
                 try
@@ -54,7 +54,7 @@ namespace Authorization.Handlers
                 }
                 catch
                 {
-                    return AuthenticateResult.Fail("Пользователь не аутентифицирован.");
+                    throw new ForbiddenException("Пользователь не аутентифицирован.");
                 }
             }
 

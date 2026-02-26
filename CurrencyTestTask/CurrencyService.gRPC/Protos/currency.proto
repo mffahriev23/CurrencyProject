@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option csharp_namespace = "CurrencyService.gRPC";
+
+package  currency;
+
+service CurrencyService{
+	rpc GetAll(Empty) returns (GetAllReply);
+}
+
+message GetAllReply{
+	repeated NameDataItem Items = 1;
+}
+
+message NameDataItem
+{
+	string id = 1;
+	string name = 2;
+}
+
+message Empty{
+}

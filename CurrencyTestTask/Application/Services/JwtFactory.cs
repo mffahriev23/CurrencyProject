@@ -1,14 +1,14 @@
 ﻿using System.Security.Claims;
 using System.Xml.Linq;
-using Authorization.Dtos;
-using Authorization.Interfaces;
-using Authorization.Options;
+using Application.Dtos;
+using Application.Interfaces;
+using Application.Options;
 using JWT;
 using JWT.Algorithms;
 using JWT.Builder;
 using Microsoft.Extensions.Options;
 
-namespace Authorization.Services
+namespace Application.Services
 {
     public class JwtFactory : IJwtFactory
     {

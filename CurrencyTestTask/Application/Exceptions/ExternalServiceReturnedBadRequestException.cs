@@ -1,4 +1,4 @@
-﻿namespace Authorization.Exceptions
+﻿namespace Application.Exceptions
 {
     public class ExternalServiceReturnedBadRequestException : Exception
     {

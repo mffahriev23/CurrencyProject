@@ -1,6 +1,7 @@
 ﻿using CurrencyService.Application;
 using CurrentService.Infrastructure.DAL;
 using Authorization;
+using Application;
 
 class Program
 {
@@ -18,12 +19,13 @@ class Program
 
         builder.Services.AddApplicationServices()
             .AddDALServices(connectionString)
-            .AddAuthorizationHandler(configuration);
+            .AddAuthorizationServices(configuration)
+            .AddAuthorizationHandler();
 
-        builder.Services.AddGlobalExceptionGandler(
+        builder.Services.AddSerilog(
             configuration,
             builder.Host
-        );
+        ).AddGlobalExceptionGandler();
 
         WebApplication app = builder.Build();
 
