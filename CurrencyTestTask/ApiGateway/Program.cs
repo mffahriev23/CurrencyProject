@@ -1,7 +1,7 @@
 ﻿using ApiGateway;
 using ApiGateway.Clients;
 using ApiGateway.Interfaces.UserService;
-using Authorization;
+using WebHost;
 using Application;
 
 class Program

@@ -1,5 +1,5 @@
 ﻿using ApiGateway.Interfaces.UserService;
-using Authorization.Attributes;
+using WebHost.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;

@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option csharp_namespace = "CurrencyService.gRPC";
+
+package favorite;
+
+service FavoriteService {
+	rpc AddFaforite(FaforiteCommadRequest) returns (google.protobuf.Empty);
+	rpc DeleteFavorite(FaforiteCommadRequest) returns (google.protobuf.Empty);
+	rpc GetFavorites(google.protobuf.Empty) returns (GetFavoritesResponse);
+}
+
+message FaforiteCommadRequest{
+	FavoriteCommandBody body = 1;
+}
+
+message FavoriteCommandBody{
+	repeated string currencyIds = 1;
+}
+
+message GetFavoritesResponse{
+	repeated FavoriteDataItem Items = 1;
+}
+
+message FavoriteDataItem{
+	string id = 1;
+	string currencyId = 2;
+	string name = 3;
+	string rate = 4;
+}

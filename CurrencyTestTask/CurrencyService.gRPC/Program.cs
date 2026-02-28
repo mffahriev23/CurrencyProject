@@ -1,19 +1,63 @@
+﻿using System.Text;
+using CurrencyService.Application;
+using CurrencyService.gRPC.Interceptors;
 using CurrencyService.gRPC.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using CurrentService.Infrastructure.DAL;
+using Application;
 
 class Program
 {
     static void Main(string[] args)
     {
-        var builder = WebApplication.CreateBuilder(args);
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-        builder.Services.AddGrpc();
+        IConfiguration configuration = builder.Configuration;
 
-        var app = builder.Build();
+        string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-        // Configure the HTTP request pipeline.
+        builder.Services.AddApplicationServices()
+            .AddDALServices(connectionString);
+
+        builder.Services.AddSerilog(
+            configuration,
+            builder.Host
+        );
+
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                byte[] key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!);
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
+        builder.Services.AddAuthorization();
+
+        builder.Services.AddScoped<ExceptionInterceptor>();
+
+        builder.Services.AddGrpc(options =>
+            options.Interceptors.Add<ExceptionInterceptor>()
+        );
+
+        WebApplication app = builder.Build();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
         app.MapGrpcService<GreeterService>();
-        app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+        app.MapGrpcService<CurrenncyServer>();
 
         app.Run();
     }

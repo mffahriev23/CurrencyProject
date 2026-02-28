@@ -14,6 +14,7 @@
     <ProjectReference Include="..\UserService.Applocation\UserService.Application.csproj" />
     <ProjectReference Include="..\UserService.Contracts\UserService.Contracts.csproj" />
     <ProjectReference Include="..\UserService.Infrastructure.DAL\UserService.Infrastructure.DAL.csproj" />
+    <ProjectReference Include="..\WebHost\WebHost.csproj" />
   </ItemGroup>
 
 </Project>

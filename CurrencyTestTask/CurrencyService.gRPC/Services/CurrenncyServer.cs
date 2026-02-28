@@ -1,9 +1,12 @@
 ﻿using CurrencyService.Application.Currency.Queries.GetAllNames;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CurrencyService.gRPC.Services
 {
+    [Authorize]
     public class CurrenncyServer : CurrencyService.CurrencyServiceBase
     {
         readonly ISender _sender;
@@ -13,15 +16,14 @@ namespace CurrencyService.gRPC.Services
             _sender = sender;
         }
 
-        public async Task<GetAllReply> GetAll(
+        public override async Task<GetAllReply> GetAll(
             Empty empty,
-            ServerCallContext context,
-            CancellationToken cancellationToken
+            ServerCallContext context
         )
         {
             NameItem[] result = await _sender.Send(
                 new GetAllNamesQuery(),
-                cancellationToken
+                context.CancellationToken
             );
 
             NameDataItem[] items = result

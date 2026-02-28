@@ -1,7 +1,7 @@
 ﻿using Application.UnitOfWork;
-using Authorization.Exceptions;
-using Authorization.Interfaces;
-using Authorization.Options;
+using WebHost.Exceptions;
+using WebHost.Interfaces;
+using WebHost.Options;
 using Microsoft.Extensions.Options;
 using Moq;
 using UserService.Application.Interfaces;

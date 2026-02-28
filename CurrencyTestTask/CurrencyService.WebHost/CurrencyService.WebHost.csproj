@@ -11,10 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Authorization\Authorization.csproj" />
     <ProjectReference Include="..\CurrencyService.Application\CurrencyService.Application.csproj" />
     <ProjectReference Include="..\CurrencyService.Contracts\CurrencyService.Contracts.csproj" />
     <ProjectReference Include="..\CurrentService.Infrastructure.DAL\CurrentService.Infrastructure.DAL.csproj" />
+    <ProjectReference Include="..\WebHost\WebHost.csproj" />
   </ItemGroup>
 
 </Project>

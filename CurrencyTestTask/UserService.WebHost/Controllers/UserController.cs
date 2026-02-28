@@ -1,4 +1,4 @@
-﻿using Authorization.Attributes;
+﻿using WebHost.Attributes;
 using Application.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

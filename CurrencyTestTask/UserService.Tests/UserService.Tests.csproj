@@ -19,9 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WebHost\WebHost.csproj" />
     <ProjectReference Include="..\\UserService.Applocation\\UserService.Application.csproj" />
     <ProjectReference Include="..\\UserService.Infrastructure.DAL\\UserService.Infrastructure.DAL.csproj" />
-    <ProjectReference Include="..\\Authorization\\Authorization.csproj" />
   </ItemGroup>
 
   <ItemGroup>

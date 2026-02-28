@@ -1,11 +1,13 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
+
 option csharp_namespace = "CurrencyService.gRPC";
 
 package  currency;
 
 service CurrencyService{
-	rpc GetAll(Empty) returns (GetAllReply);
+	rpc GetAll(google.protobuf.Empty) returns (GetAllReply);
 }
 
 message GetAllReply{
@@ -16,7 +18,4 @@ message NameDataItem
 {
 	string id = 1;
 	string name = 2;
-}
-
-message Empty{
 }

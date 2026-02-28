@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Authorization.Middlewares
+namespace WebHost.Middlewares
 {
     public class GlobalExceptionHandler : IExceptionHandler
     {

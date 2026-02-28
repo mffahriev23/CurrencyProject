@@ -1,4 +1,4 @@
-﻿using Authorization;
+﻿using WebHost;
 using Serilog;
 using UserService.Application;
 using UserService.Infrastructure.DAL;

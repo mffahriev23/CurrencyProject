@@ -1,13 +1,13 @@
-﻿using Authorization.Handlers;
+﻿using WebHost.Handlers;
 using Application.Interfaces;
-using Authorization.Middlewares;
+using WebHost.Middlewares;
 using Application.Options;
 using Application.Services;
 using Microsoft.AspNetCore.Authentication;
 using Serilog;
 using Serilog.Exceptions;
 
-namespace Authorization
+namespace WebHost
 {
     public static class DependencyInjection
     {

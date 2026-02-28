@@ -1,6 +1,6 @@
 ﻿using CurrencyService.Application;
 using CurrentService.Infrastructure.DAL;
-using Authorization;
+using WebHost;
 using Application;
 
 class Program
