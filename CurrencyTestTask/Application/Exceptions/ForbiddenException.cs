@@ -6,5 +6,10 @@
             : base(message)
         {
         }
+
+        public ForbiddenException(string message, Exception exception)
+            : base(message, exception)
+        {
+        }
     }
 }

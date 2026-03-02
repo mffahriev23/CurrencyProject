@@ -8,10 +8,10 @@ namespace ApiGateway.Clients
 {
     public class UserServiceClient : BaseServiceClient, IUserServiceClient
     {
-        const string _registrationEndpoint = "/api/User/registration";
-        const string _authenticationEndpoint = "/api/User/authentication";
-        const string _logoutEndpoint = "/api/User/logout";
-        const string _refreshEndpoint = "/api/User/refresh";
+        const string _registrationEndpoint = "/api/v2/User/registration";
+        const string _authenticationEndpoint = "/api/v2/User/authentication";
+        const string _logoutEndpoint = "/api/v2/User/logout";
+        const string _refreshEndpoint = "/api/v2/User/refresh";
 
         public UserServiceClient(HttpClient httpClient)
             : base(httpClient)

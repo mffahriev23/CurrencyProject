@@ -3,6 +3,9 @@ using Serilog;
 using UserService.Application;
 using UserService.Infrastructure.DAL;
 using Application;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 class Program
 {
@@ -18,15 +21,34 @@ class Program
 
         string? connectionString = configuration.GetConnectionString("DefaultConnection");
 
-        builder.Services.AddApplicatiinServices()
-            .AddDALServices(connectionString)
-            .AddAuthorizationServices(configuration)
-            .AddAuthorizationHandler();
-
         builder.Services.AddSerilog(
             configuration,
             builder.Host
-        ).AddGlobalExceptionGandler();
+        );
+
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                byte[] key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!);
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
+        builder.Services.AddAuthorization();
+
+        builder.Services.AddApplicatiinServices()
+            .AddDALServices(connectionString);
 
         var app = builder.Build();
 
@@ -41,6 +63,7 @@ class Program
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
+        app.UseAuthentication();
 
         app.MapControllers();
 

@@ -15,13 +15,13 @@ using UserService.WebHost.Mappings;
 
 namespace UserService.WebHost.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserV1Controller : ControllerBase
     {
         readonly ISender _sender;
 
-        public UserController(ISender sender)
+        public UserV1Controller(ISender sender)
         {
             _sender = sender;
         }
