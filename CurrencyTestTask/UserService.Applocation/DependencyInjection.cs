@@ -16,7 +16,9 @@ namespace UserService.Application
 
         public static IServiceCollection AddInternalServices(this IServiceCollection services)
         {
-            services.AddTransient<IRefreshTokenService, RefreshTokenService>();
+            services.AddMemoryCache();
+
+            services.AddScoped<IRefreshTokenService, RefreshTokenService>();
             services.AddTransient<IHasher, HasherService>();
             services.AddTransient<ITokenGenerator, TokenGenerator>();
 

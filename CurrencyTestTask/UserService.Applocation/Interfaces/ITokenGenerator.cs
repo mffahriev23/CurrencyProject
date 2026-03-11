@@ -4,6 +4,6 @@
     {
         string GenerateRefreshToken();
 
-        string GenerateAccessToken(Guid userId, string username);
+        string GenerateAccessToken(Guid userId, string? username);
     }
 }

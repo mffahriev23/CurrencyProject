@@ -26,31 +26,14 @@ class Program
             builder.Host
         );
 
-        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                byte[] key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!);
+        builder.Services.AddGlobalExceptionHandler();
 
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                    ValidAudience = builder.Configuration["Jwt:Audience"],
-
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ClockSkew = TimeSpan.Zero
-                };
-            });
-
-        builder.Services.AddAuthorization();
+        builder.Services.AddAuthorization(configuration);
 
         builder.Services.AddApplicatiinServices()
             .AddDALServices(connectionString);
 
-        var app = builder.Build();
+        WebApplication app = builder.Build();
 
         app.UseExceptionHandler();
 
@@ -62,8 +45,7 @@ class Program
 
         app.UseHttpsRedirection();
 
-        app.UseAuthorization();
-        app.UseAuthentication();
+        app.UseAuthorizationAndAuthentication();
 
         app.MapControllers();
 

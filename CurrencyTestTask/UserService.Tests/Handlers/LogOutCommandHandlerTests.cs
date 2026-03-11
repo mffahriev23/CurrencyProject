@@ -1,25 +1,22 @@
 ﻿using Application.UnitOfWork;
 using Moq;
-using UserService.Application.Repositories;
-using UserService.Application.Users.Commands.LogOut;
+using UserService.Application.Interfaces;
+using UserService.Application.Users.Commands.LogOutV2;
 using UserService.Domain.Entities;
 
 namespace UserService.Tests.Handlers
 {
     public class LogOutCommandHandlerTests
     {
-        private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-        private readonly Mock<IRefreshTokenRepository> _refreshTokenRepositoryMock;
+        private readonly Mock<IRefreshTokenService> _refreshTokenServiceMock;
         private readonly LogOutCommandHandler _handler;
 
         public LogOutCommandHandlerTests()
         {
-            _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _refreshTokenRepositoryMock = new Mock<IRefreshTokenRepository>();
+            _refreshTokenServiceMock = new Mock<IRefreshTokenService>();
 
             _handler = new LogOutCommandHandler(
-                _unitOfWorkMock.Object,
-                _refreshTokenRepositoryMock.Object
+                _refreshTokenServiceMock.Object
             );
         }
 
@@ -39,13 +36,8 @@ namespace UserService.Tests.Handlers
                 IsRevoked = false
             };
 
-            _refreshTokenRepositoryMock
-                .Setup(x => x.Get(userId, refreshTokenText, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(token);
-
-            _unitOfWorkMock
-                .Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(1);
+            _refreshTokenServiceMock
+                .Setup(x => x.RevokeRefreshToken(userId, refreshTokenText, It.IsAny<CancellationToken>()));
 
             LogOutCommand command = new(userId, refreshTokenText);
 

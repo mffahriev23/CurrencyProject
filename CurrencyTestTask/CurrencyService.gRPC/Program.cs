@@ -1,11 +1,9 @@
-﻿using System.Text;
-using CurrencyService.Application;
+﻿using CurrencyService.Application;
 using CurrencyService.gRPC.Interceptors;
 using CurrencyService.gRPC.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using CurrentService.Infrastructure.DAL;
 using Application;
+using WebHost;
 
 class Program
 {
@@ -25,26 +23,7 @@ class Program
             builder.Host
         );
 
-        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                byte[] key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!);
-
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                    ValidAudience = builder.Configuration["Jwt:Audience"],
-                   
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ClockSkew = TimeSpan.Zero
-                };
-            });
-
-        builder.Services.AddAuthorization();
+        builder.Services.AddAuthorization(configuration);
 
         builder.Services.AddScoped<ExceptionInterceptor>();
 
@@ -54,8 +33,7 @@ class Program
 
         WebApplication app = builder.Build();
 
-        app.UseAuthentication();
-        app.UseAuthorization();
+        app.UseAuthorizationAndAuthentication();
 
         app.MapGrpcService<GreeterService>();
         app.MapGrpcService<CurrenncyServer>();

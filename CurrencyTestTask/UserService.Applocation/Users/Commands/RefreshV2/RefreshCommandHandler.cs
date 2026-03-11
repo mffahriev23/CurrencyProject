@@ -31,7 +31,7 @@ namespace UserService.Application.Users.Commands.RefreshV2
             CancellationToken cancellationToken
         )
         {
-            (Guid userId, string username) = GetUserIdFromExpiredToken(
+            (Guid userId, string? username) = GetUserIdFromExpiredToken(
                 request.AccessToken
             );
 
@@ -64,22 +64,26 @@ namespace UserService.Application.Users.Commands.RefreshV2
             return new RefreshResult(accessToken, refreshToken);
         }
 
-        private (Guid userId, string username) GetUserIdFromExpiredToken(string token)
+        private (Guid userId, string? username) GetUserIdFromExpiredToken(string token)
         {
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            byte[] key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
+            JwtSecurityTokenHandler tokenHandler = new();
 
             try
             {
+                string keyConfig = _configuration["Jwt:Key"]!;
+                string issuer = _configuration["Jwt:Issuer"]!;
+                string audience = _configuration["Jwt:Audience"]!;
+
+                byte[] key = Encoding.UTF8.GetBytes(keyConfig);
+
                 ClaimsPrincipal principal = tokenHandler.ValidateToken(
                     token,
                     new TokenValidationParameters
                     {
-                        ValidateAudience = true,
-                        ValidateIssuer = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = _configuration["Jwt:Issuer"],
-                        ValidAudience = _configuration["Jwt:Audience"],
+                        ValidateAudience = false,
+                        ValidateIssuer = false,
+                        ValidIssuer = issuer,
+                        ValidAudience = audience,
                         IssuerSigningKey = new SymmetricSecurityKey(key),
                         ValidateLifetime = false
                     },
@@ -87,7 +91,7 @@ namespace UserService.Application.Users.Commands.RefreshV2
                 );
 
                 string userIdText = principal.Claims.First(x => x.Type.Equals("userId")).Value;
-                string username = principal.Claims.First(x => x.Type.Equals(ClaimTypes.Name)).Value;
+                string? username = principal.Claims.FirstOrDefault(x => x.Type.Equals("userName"))?.Value;
 
                 return (new Guid(userIdText), username);
             }

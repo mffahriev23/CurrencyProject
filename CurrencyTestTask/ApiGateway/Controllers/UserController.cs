@@ -1,5 +1,4 @@
 ﻿using ApiGateway.Interfaces.UserService;
-using WebHost.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -56,18 +55,17 @@ namespace ApiGateway.Controllers
 
         [HttpPost("refresh")]
         [Authorize]
-        [AccessExpiredToken]
         public async Task<IActionResult> Refresh(CancellationToken cancellationToken)
         {
             RefreshTokenRequest request = new()
             {
                 Body = new RefreshTokenBody
                 {
-                    RefreshToken = Request.Cookies["refreshToken"]
+                    RefreshToken = Uri.UnescapeDataString(Request.Cookies["refreshToken"])
                 }
             };
 
-            string authorization = Request.Headers["Authorization"];
+            string authorization = Request.Headers["Authorization"]; // Исправление многократного добавления заголовка в HttpClient
 
             RefreshTokenResponse response = await _userServiceClient.RefreshToken(
                 request,
@@ -92,7 +90,7 @@ namespace ApiGateway.Controllers
                 }
             };
 
-            string authorization = Request.Headers["Authorization"];
+            string authorization = Request.Headers["Authorization"]; // Исправление многократного добавления заголовка в HttpClient
 
             await _userServiceClient.LogOut(
                 request,

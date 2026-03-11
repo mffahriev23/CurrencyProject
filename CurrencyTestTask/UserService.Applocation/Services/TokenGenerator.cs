@@ -25,23 +25,27 @@ namespace UserService.Application.Services
             return Convert.ToBase64String(bytes);
         }
 
-        public string GenerateAccessToken(Guid userId, string username)
+        public string GenerateAccessToken(Guid userId, string? username)
         {
-            var claims = new[]
+            Claim[] claims = new[]
             {
-                new Claim("userId", userId.ToString()),
-                new Claim(ClaimTypes.Name, username),
+                new Claim("userId", userId.ToString())
             };
 
-            byte[] keyBytes = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
+            string keyConfig = _configuration["Jwt:Key"]!;
+            string issuer = _configuration["Jwt:Issuer"]!;
+            string audience = _configuration["Jwt:Audience"]!;
+            int expires = int.Parse(_configuration["Jwt:TokenLifetimeMinutes"]!);
+
+            byte[] keyBytes = Encoding.UTF8.GetBytes(keyConfig);
             SymmetricSecurityKey key = new SymmetricSecurityKey(keyBytes);
             SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             JwtSecurityToken token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: issuer,
+                audience: audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(int.Parse(_configuration["Jwt:TokenLifetimeMinutes"]!)),
+                expires: DateTime.UtcNow.AddMinutes(expires),
                 signingCredentials: creds
             );
 

@@ -1,11 +1,10 @@
-﻿using WebHost.Attributes;
-using Application.Extensions;
+﻿using Application.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using UserService.Application.Users.Commands.Authentication;
-using UserService.Application.Users.Commands.LogOut;
-using UserService.Application.Users.Commands.Refresh;
+using UserService.Application.Users.Commands.AuthenticationV2;
+using UserService.Application.Users.Commands.LogOutV2;
+using UserService.Application.Users.Commands.RefreshV2;
 using UserService.Application.Users.Commands.Registration;
 using UserService.Contracts.Users.Authentication;
 using UserService.Contracts.Users.Logout;
@@ -15,13 +14,13 @@ using UserService.WebHost.Mappings;
 
 namespace UserService.WebHost.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/v2/[controller]")]
     [ApiController]
-    public class UserV1Controller : ControllerBase
+    public class UserController : ControllerBase
     {
         readonly ISender _sender;
 
-        public UserV1Controller(ISender sender)
+        public UserController(ISender sender)
         {
             _sender = sender;
         }
@@ -41,15 +40,20 @@ namespace UserService.WebHost.Controllers
         }
 
         [HttpPost("authentication")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Authentication(
+        public async Task<AuthenticationResponse> Authentication(
             AuthenticationRequest request,
             CancellationToken cancellationToken
         )
         {
-            AuthenticationCommand command = request.Map();
+            AuthenticationCommand command = new(
+                request.Body!.Name!,
+                request.Body.Password!
+            );
 
-            AuthenticationResult result = await _sender.Send(command, cancellationToken);
+            AuthenticationResult result = await _sender.Send(
+                command,
+                cancellationToken
+            );
 
             AuthenticationResponse response = new()
             {
@@ -57,7 +61,7 @@ namespace UserService.WebHost.Controllers
                 RefreshToken = result.RefreshToken
             };
 
-            return Ok(response);
+            return response;
         }
 
         [HttpPost("logout")]
@@ -78,15 +82,13 @@ namespace UserService.WebHost.Controllers
         }
 
         [HttpPost("refresh")]
-        [Authorize]
-        [AccessExpiredToken]
         public async Task<IActionResult> Refresh(
             RefreshTokenRequest request,
             CancellationToken cancellationToken
         )
         {
             RefreshCommand command = new(
-                User.Claims.GetUserId(),
+                request.Body!.AccessToken!,
                 request.Body!.RefreshToken!
             );
 

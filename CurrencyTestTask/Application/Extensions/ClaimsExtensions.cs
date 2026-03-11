@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using Application.Dtos;
 
 namespace Application.Extensions
 {
@@ -7,16 +6,9 @@ namespace Application.Extensions
     {
         public static Guid GetUserId(this IEnumerable<Claim> claims)
         {
-            string userIdText = claims.First(x => x.Type == nameof(AccessTokenClaims.UserId)).Value;
+            string userIdText = claims.First(x => x.Type.Equals("userId")).Value;
 
             return new Guid(userIdText);
-        }
-
-        public static Guid GetRefreshKey(this IEnumerable<Claim> claims)
-        {
-            string keyText = claims.First(x => x.Type == nameof(RefreshTokenClaims.Key)).Value;
-
-            return new Guid(keyText);
         }
     }
 }

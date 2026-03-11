@@ -39,6 +39,7 @@ namespace ApiGateway.Clients
 
         public async Task LogOut(LogOutRequest request, string accessToken, CancellationToken cancellationToken)
         {
+                        _client.DefaultRequestHeaders.Remove("Authorization");
             _client.DefaultRequestHeaders.Add("Authorization", accessToken);
 
             using HttpResponseMessage message = await _client.PostAsJsonAsync(
@@ -59,6 +60,7 @@ namespace ApiGateway.Clients
             CancellationToken cancellationToken
         )
         {
+                        _client.DefaultRequestHeaders.Remove("Authorization");
             _client.DefaultRequestHeaders.Add("Authorization", accessToken);
 
             using HttpResponseMessage message = await _client.PostAsJsonAsync(

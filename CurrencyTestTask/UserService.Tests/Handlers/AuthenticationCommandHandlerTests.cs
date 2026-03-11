@@ -1,12 +1,11 @@
-﻿using Application.UnitOfWork;
-using Application.Exceptions;
-using Application.Interfaces;
-using Application.Options;
+﻿using Application.Exceptions;
+using Application.UnitOfWork;
 using Microsoft.Extensions.Options;
 using Moq;
 using UserService.Application.Interfaces;
 using UserService.Application.Repositories;
-using UserService.Application.Users.Commands.Authentication;
+using UserService.Application.Services;
+using UserService.Application.Users.Commands.AuthenticationV2;
 using UserService.Domain.Entities;
 
 namespace UserService.Tests.Handlers
@@ -15,28 +14,22 @@ namespace UserService.Tests.Handlers
     {
         private readonly Mock<IHasher> _hasherMock;
         private readonly Mock<IUserRepository> _userRepositoryMock;
-        private readonly Mock<IRefreshTokenRepository> _refreshTokenRepositoryMock;
-        private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-        private readonly Mock<IJwtFactory> _jwtManagerMock;
-        private readonly Mock<IOptions<JwtManagerOptions>> _jwtManagerOptionsMock;
+        private readonly Mock<IRefreshTokenService> _refreshTokenServiceMock;
+        private readonly Mock<ITokenGenerator> _tokenGenerator;
         private readonly AuthenticationCommandHandler _handler;
 
         public AuthenticationCommandHandlerTests()
         {
             _hasherMock = new Mock<IHasher>();
             _userRepositoryMock = new Mock<IUserRepository>();
-            _refreshTokenRepositoryMock = new Mock<IRefreshTokenRepository>();
-            _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _jwtManagerMock = new Mock<IJwtFactory>();
-            _jwtManagerOptionsMock = new Mock<IOptions<JwtManagerOptions>>();
+            _refreshTokenServiceMock = new Mock<IRefreshTokenService>();
+            _tokenGenerator = new Mock<ITokenGenerator>();
 
             _handler = new AuthenticationCommandHandler(
-                _jwtManagerOptionsMock.Object,
                 _hasherMock.Object,
                 _userRepositoryMock.Object,
-                _refreshTokenRepositoryMock.Object,
-                _unitOfWorkMock.Object,
-                _jwtManagerMock.Object
+                _refreshTokenServiceMock.Object,
+                _tokenGenerator.Object
             );
         }
 
@@ -62,19 +55,7 @@ namespace UserService.Tests.Handlers
                 .Setup(x => x.VerifyText(user.Password, password))
                 .Returns(true);
 
-            _jwtManagerMock
-                .Setup(x => x.GetJwtToken(userId, name))
-                .Returns("access-token");
-
             RefreshToken? captured = null;
-
-            _refreshTokenRepositoryMock
-                .Setup(x => x.Add(It.IsAny<RefreshToken>()))
-                .Callback<RefreshToken>(t => captured = t);
-
-            _unitOfWorkMock
-                .Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(1);
 
             AuthenticationCommand command = new(name, password);
 
